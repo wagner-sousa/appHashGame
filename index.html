@@ -10,11 +10,8 @@
           <title>Hash Game</title>
 
           <!-- Bootstrap core CSS -->
-
-          <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-          
           <link href="bootstrap.min.css" rel="stylesheet">
-          
+
           <style>
                .bd-placeholder-img {
                     font-size: 1.125rem;
@@ -84,8 +81,8 @@
                               <br>Basta clicar no botão abaixo.
                          </div>
                          <div class="modal-footer justify-content-center">
-                              <button type="button" class="btn btn-warning" onclick="reboot()" data-dismiss="modal"><i class="fa fa-refresh"></i> Recomeçar</button>
-                              <button type="button" class="btn btn-danger" id="pay" onclick="otario()"><i class="fa fa-usd"></i> Ajude-nos</button>  
+                              <button type="button" class="btn btn-warning" onclick="reboot()" data-dismiss="modal">Recomeçar</button>
+                              <button type="button" class="btn btn-danger" id="pay" onclick="otario()">Ajude-nos</button>  
                          </div>
                     </div>
                </div>
@@ -102,18 +99,28 @@
                     [0, 4, 8],
                     [2, 4, 6]
                ];
+               // a variável matrix serve como referencial de como deve ser as vitórias no jogo
+               // tudo foi traduzido para combinações de vetores
+               // assim ao completar linhas verticais, horizontais e diagornais, será declarado um vencedor.
 
-               function process(pos) {
+               function process(pos) { //alterna o X e a O
                     clicks++;
-                    var type = (clicks % 2 === 0) ? "X" : "O";
-                    if(document.game.opt[pos].value == ""){
-                         var type = document.game.opt[pos].value = type;
-                         check(type);
+                    var type = (clicks % 2 === 0) ? "X" : "O"; // define se é a vez do X ou da O
+                    if(document.game.opt[pos].value == ""){ // testa para saber se na posição clicada, já foi selecionada antes
+                         var type = document.game.opt[pos].value = type; // aplica a jogada
+                         check(type); //faz uma leitura para saber se alguém venceu
+                    }
+                    else
+                    {
+                         clicks--; // se o campo clicado estava cheio, além de não clicar, regride/anula uma jogada 
+                    }
+                    if(clicks === 9){
+                         $('#modalCenter').modal('show'); // caso dê empate, finaliza o jogo.
                     }
                }
 
 
-               function check(type) {
+               function check(type) { // verifica para saber se existe algum vencedor
                     matrix.forEach(function(x) {
                          var count = 0;
                          x.forEach(function(y) {
@@ -121,21 +128,19 @@
                                    count++;
                          });
                          if (count == 3) {
-                              wins(x);
-                              //var person = (document.game[type].value || type);
-                              //alert('Parabéns ' + person + '!!! você ganhou!!!');
+                              wins(x); // executa a função de vitória
                          }
                     });
                }
 
-               function wins(x) {
+               function wins(x) { // função que executa a vitória
                     x.forEach(function(i) {
-                         document.game.opt[i].classList.add('bg-success');
+                         document.game.opt[i].classList.add('bg-success'); // deixa os campos do vencedor verde
                     });
-                    $('#modalCenter').modal('show');
+                    $('#modalCenter').modal('show'); // mostra o modal de fim de jogo
                }
 
-               function reboot() {
+               function reboot() { // reinicia o jogo, limpando os dados
                     for (x = 0; x <= 8; x++) {
                          document.game.opt[x].value = '';
                          document.game.opt[x].classList.remove('bg-success');
@@ -157,7 +162,7 @@
                     }
                }
           </script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+          <script src="jquery.min.js"></script>
+          <script src="bootstrap.bundle.min.js"></script>
      </body>
 </html>
